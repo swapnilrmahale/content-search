@@ -41,4 +41,8 @@ public class DocumentIndexer {
 			e.printStackTrace();
 		} 
 	}
+	
+	public static ArrayListMultimap<String, PostingList> getDictionary() {
+		return dictionary;
+	}
 }
