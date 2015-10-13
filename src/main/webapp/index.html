@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>Search Assignment</title>
+</head>
+<body>
+	<div id='input'>
+		Enter your Search Term Here : <input type='text' id='query' /> <input
+			type='button' value='Search' id='search' />
+	</div>
+	<div id='output'>Output...</div>
+</body>
+<script
+	src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
+<script type="text/javascript">
+	$(function() {
+		$('#search').bind({
+			click : function() {
+				var query = $('#query').val();
+				$.ajax({
+					url : '/content-search/rest/search?query=' + query,
+					success : function(data) {
+						console.log(data);
+					},
+					error : function() {
+						console.log('ERROR');
+					}
+				});
+			}
+		});
+	});
+</script>
+</html>

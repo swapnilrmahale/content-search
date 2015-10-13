@@ -1,0 +1,35 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="searchController" class="com.persistent.swapnil.ctrl.SearchController">
+		<property name="searchService" ref="searchService"></property>
+	</bean>
+
+	<bean id="indexerService" class="com.persistent.swapnil.services.IndexerService"
+		init-method="index">
+		<property name="staticCollection" value="${static.collection.path}"></property>
+	</bean>
+
+	<bean id="searchService" class="com.persistent.swapnil.services.SearchService">
+		<property name="indexerService" ref="indexerService"></property>
+	</bean>
+
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:/application.properties</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="false" />
+	</bean>
+	
+	<bean id="jsonHttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		<property name="prefixJson" value="false" />
+		<property name="supportedMediaTypes" value="application/json" />
+	</bean>
+
+</beans>
