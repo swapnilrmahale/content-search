@@ -32,4 +32,9 @@ public class SearchResult {
 	public void setElapsedTime(long elapsedTime) {
 		this.elapsedTime = elapsedTime;
 	}
+
+	@Override
+	public String toString() {
+		return "SearchResult [query=" + query + ", postingList=" + postingList + ", elapsedTime=" + elapsedTime + "]";
+	}
 }

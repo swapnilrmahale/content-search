@@ -23,11 +23,10 @@ public class DocumentIndexer {
 			try (BufferedReader br = new BufferedReader(new FileReader(document)))
 			{
 				String line;
-
 				dictionary = ArrayListMultimap.create();
 				
 				while ((line = br.readLine()) != null) {
-					ArrayListMultimap<String, Integer> positionalIndexes = getPositionalIndexes(line);
+					ArrayListMultimap<String, Integer> positionalIndexes = createPositionalIndexes(line);
 					Set<String> terms = positionalIndexes.keySet();
 					for (String term : terms) {
 						List<Integer> positions = positionalIndexes.get(term);
@@ -35,46 +34,29 @@ public class DocumentIndexer {
 					}
 					lineNumber++;
 				}
-
 			} catch (IOException e) {
 				e.printStackTrace();
 			} 
 		} else {
 			System.err.println(document.getAbsolutePath() + " is not present");
 		}
-		System.out.println(dictionary);
+		System.out.println(dictionary.size() + " terms indexed");
 		return dictionary;
 	}
 	
-	private static ArrayListMultimap<String,Integer> getPositionalIndexes(String line) {
-		if (StringUtils.isEmpty(line)) {
-			// throw new Exception();
-		}
-
-		line = line.toLowerCase();
-		line = line.replace(".", "");
-		line = line.replace(";", "");
-		line = line.replace("(", "");
-		line = line.replace(")", "");
-		line = line.replace(",", "");
-		line = line.replace("\"", "");
-		line = line.replace("'s", "");
-		
-		line = line.replaceAll("\\s+", " ").trim();		
+	private static ArrayListMultimap<String,Integer> createPositionalIndexes(String line) {
+	
+		line = LinguisticOptimizer.procesLine(line);
 		String[] tokens = line.split("\\s");
 		
-		ArrayListMultimap<String,Integer> positionalIndexes = createPositionalIndexes(tokens);
-		
-		return positionalIndexes;
-	}
-
-	private static ArrayListMultimap<String,Integer> createPositionalIndexes(String[] tokens) {
-		ArrayListMultimap<String,Integer> positionalIndexes =  ArrayListMultimap.create();
+		ArrayListMultimap<String,Integer> positionalIndexes = ArrayListMultimap.create();
 		
 		for (int i = 0; i < tokens.length; i++) {
-			String token = tokens[i].trim();
-			positionalIndexes.put(token, (i+1));
+			String token = LinguisticOptimizer.processToken(tokens[i]);
+			if (!StringUtils.isEmpty(token))
+				positionalIndexes.put(token, (i+1));
 		}
 		return positionalIndexes;
 	}
+
 }

@@ -22,7 +22,9 @@ public class SearchController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public SearchResult search(@RequestParam(value="query") String query) {
-		return getSearchService().search(query, System.nanoTime());
+		SearchResult result = getSearchService().search(query, System.nanoTime());
+		System.out.println(result);
+		return result;
 	}
 	
 	@RequestMapping(value="re-index", method=RequestMethod.GET)

@@ -3,15 +3,25 @@
 <title>Search Assignment</title>
 </head>
 <body>
+	<hr/>
 	<div id='input'>
-		Enter your Search Term Here : <input type='text' id='query' /> <input
+		Enter Search Term Here : <input type='text' id='query' /> <input
 			type='button' value='Search' id='search' />
 	</div>
-	<div id='output'>Output...</div>
+	<hr/>
+	<div id='output' style="display: none;">
+		Input: <span id='term'></span><br />
+		<div id='lineOccurences'>
+		</div>
+	    Total Count: <span id='count'></span><br /> 
+		Time taken for search: <span id='elapsedTime'></span>
+	</div>
+	<hr/>
 </body>
 <script
 	src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
-<script type="text/javascript">
+<script type='text/javascript'>
+	
 	$(function() {
 		$('#search').bind({
 			click : function() {
@@ -19,10 +29,25 @@
 				$.ajax({
 					url : '/content-search/rest/search?query=' + query,
 					success : function(data) {
-						console.log(data);
+						$('#term').html(data.query);
+						var postingList = data.postingList;
+						var elapsedTime = data.elapsedTime / 1000000;
+						var list = "";
+						var totalCount = 0;
+						for(var i = 0; i < postingList.length; i++) {
+							var lineNumber = postingList[i].lineNumber;
+							var count = postingList[i].count;
+							var entry = "<span>" + lineNumber + ":" + count + "</span><br/>";
+							list = list + entry;
+							totalCount = totalCount + count;
+						}
+						$('#lineOccurences').html(list);
+						$('#count').html(totalCount + " Occurences in Document");
+						$('#elapsedTime').html(elapsedTime + " Milliseconds");
+						$("#output").show();
 					},
 					error : function() {
-						console.log('ERROR');
+						$("#output").html('Error occured while serving your last request. Please try again after some time');
 					}
 				});
 			}
