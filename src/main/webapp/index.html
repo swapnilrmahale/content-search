@@ -1,27 +1,38 @@
 <html>
 <head>
 <title>Search Assignment</title>
+<style type="text/css">
+#error {
+	color: red;
+	display: none;
+}
+
+#output {
+	display: none;
+}
+</style>
 </head>
 <body>
-	<hr/>
+	<hr />
 	<div id='input'>
 		Enter Search Term Here : <input type='text' id='query' /> <input
 			type='button' value='Search' id='search' />
 	</div>
-	<hr/>
-	<div id='output' style="display: none;">
+	<hr />
+	<div id='output'>
 		Input: <span id='term'></span><br />
-		<div id='lineOccurences'>
-		</div>
-	    Total Count: <span id='count'></span><br /> 
-		Time taken for search: <span id='elapsedTime'></span>
+		<div id='lineOccurences'></div>
+		Total Count: <span id='count'></span><br /> Time taken for search: <span
+			id='elapsedTime'></span>
 	</div>
-	<hr/>
+	<div id="error">
+		<div id="errorMessage"></div>
+	</div>
+	<hr />
 </body>
 <script
 	src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
 <script type='text/javascript'>
-	
 	$(function() {
 		$('#search').bind({
 			click : function() {
@@ -29,29 +40,64 @@
 				$.ajax({
 					url : '/content-search/rest/search?query=' + query,
 					success : function(data) {
-						$('#term').html(data.query);
-						var postingList = data.postingList;
-						var elapsedTime = data.elapsedTime / 1000000;
-						var list = "";
-						var totalCount = 0;
-						for(var i = 0; i < postingList.length; i++) {
-							var lineNumber = postingList[i].lineNumber;
-							var count = postingList[i].count;
-							var entry = "<span>" + lineNumber + ":" + count + "</span><br/>";
-							list = list + entry;
-							totalCount = totalCount + count;
+						if (data.errorCode == "NO_ERROR") {
+							console.log(data);
+							successHandler(data);
+						} else {
+							console.log("Error : " + data);
+							errorHandler(data.errorCode);
 						}
-						$('#lineOccurences').html(list);
-						$('#count').html(totalCount + " Occurences in Document");
-						$('#elapsedTime').html(elapsedTime + " Milliseconds");
-						$("#output").show();
 					},
 					error : function() {
-						$("#output").html('Error occured while serving your last request. Please try again after some time');
+						genericErrorHandler();
 					}
 				});
 			}
 		});
+
 	});
+
+	function successHandler(data) {
+		$("#error").hide();
+		$('#term').html($('#query').val());
+		var postingList = data.postingList;
+		var elapsedTime = data.elapsedTime / 1000000;
+		var list = "";
+		var termDocumentFrequency = 0;
+		for (var i = 0; i < postingList.length; i++) {
+			var lineNumber = postingList[i].lineNumber;
+			var termLineFrequency = postingList[i].termLineFrequency;
+			var entry = "<span>" + lineNumber + ":" + termLineFrequency
+					+ "</span><br/>";
+			list = list + entry;
+			termDocumentFrequency = termDocumentFrequency + termLineFrequency;
+		}
+		$('#lineOccurences').html(list);
+		$('#count').html(termDocumentFrequency + " Occurences in Document");
+		$('#elapsedTime').html(elapsedTime + " Milliseconds");
+		$("#output").show();
+	}
+
+	function errorHandler(errorCode) {
+		$("#output").hide();
+		var message;
+		switch (errorCode) {
+		case "NULL_INDEXES":
+			message = "Indexed are empty. Please update application.properties and restart the server\n";
+			break;
+
+		default:
+			message = "Error occured while serving your last request. Please try again after some time";
+		}
+		$("#errorMessage").html(message);
+		$("#error").show();
+	}
+
+	function genericErrorHandler() {
+		$("#output").hide();
+		var message = 'Error occured while serving your last request. Please try again after some time';
+		$("#errorMessage").html(message);
+		$("#error").show();
+	}
 </script>
 </html>

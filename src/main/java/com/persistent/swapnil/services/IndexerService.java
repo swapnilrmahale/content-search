@@ -15,7 +15,11 @@ public class IndexerService {
 		dictionary = ArrayListMultimap.create();
 	}
 	
-	public void index() {
+	public long index(String path) {
+		staticCollection = path;
+		return index();
+	}
+	public long index() {
 		File location = new File(staticCollection);
 		if (location.isDirectory()) {
 			
@@ -31,6 +35,7 @@ public class IndexerService {
 		} else {
 			System.err.println(staticCollection + " is not a directory");
 		}
+		return dictionary.asMap().size();
 	}
 
 	public String getStaticCollection() {

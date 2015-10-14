@@ -1,15 +1,11 @@
 package com.persistent.swapnil.ctrl;
 
-import java.util.Collection;
-import java.util.Map;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.persistent.swapnil.beans.PostingList;
 import com.persistent.swapnil.beans.SearchResult;
 import com.persistent.swapnil.services.SearchService;
 
@@ -27,11 +23,10 @@ public class SearchController {
 		return result;
 	}
 	
-	@RequestMapping(value="re-index", method=RequestMethod.GET)
+	@RequestMapping(value="index", method=RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Collection<PostingList>> index() {
-		searchService.getIndexerService().index();
-		return searchService.getIndexerService().getDictionary().asMap();
+	public long index(@RequestParam(value="path") String path) {
+		return searchService.getIndexerService().index(path);
 	}
 	
 	public SearchService getSearchService() {

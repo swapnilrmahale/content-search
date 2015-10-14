@@ -6,7 +6,7 @@ public class PostingList {
 
 	private Long lineNumber;
 	private List<Integer> positions;
-	private Integer count;
+	private Integer termLineFrequency;
 	
 	public PostingList() {
 
@@ -15,14 +15,14 @@ public class PostingList {
 	public PostingList(Long lineNumber, List<Integer> positions) {
 		this.lineNumber = lineNumber;
 		this.positions = positions;
-		count = positions.size();
+		termLineFrequency = positions.size();
 	}
 	
 	public Long getLineNumber() {
 		return lineNumber;
 	}
-	public Integer getCount() {
-		return count;
+	public Integer getTermLineFrequency() {
+		return termLineFrequency;
 	}
 	public List<Integer> getPositions() {
 		return positions;
@@ -31,7 +31,7 @@ public class PostingList {
 	@Override
 	public String toString() {
 		return "PostingList [lineNumber=" + lineNumber + ", positions="
-				+ positions + ", count=" + count + "]";
+				+ positions + ", termLineFrequency=" + termLineFrequency + "]";
 	}
 	
 	

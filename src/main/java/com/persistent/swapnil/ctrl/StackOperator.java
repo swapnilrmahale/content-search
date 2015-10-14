@@ -51,7 +51,10 @@ public class StackOperator {
 				if (length != 1) {
 					System.err.println("'" + command + "' is INVALID");
 				} else {
-					System.out.println("Element '" + stack.get(stack.size() - 1) + "' is PEEKED");
+					if (stack.size() < 1)
+						System.out.println("NOTHING to PEEK");
+					else
+						System.out.println("Element '" + stack.get(stack.size() - 1) + "' is PEEKED");
 				}
 				break;
 

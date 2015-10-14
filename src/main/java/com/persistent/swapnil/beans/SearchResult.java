@@ -7,11 +7,17 @@ public class SearchResult {
 	private String query;
 	private List<PostingList> postingList;
 	private long elapsedTime;
+	private String errorCode;
 	
-	public SearchResult(String query, List<PostingList> postingList, long elapsedTime) {
+	public SearchResult(String query, List<PostingList> postingList, long elapsedTime, String error) {
 		this.query = query;
 		this.postingList = postingList;
 		this.elapsedTime = elapsedTime;
+		this.errorCode = error;
+	}
+	
+	public SearchResult(String errorCode) {
+		this.errorCode = errorCode;
 	}
 	
 	public String getQuery() {
@@ -32,9 +38,18 @@ public class SearchResult {
 	public void setElapsedTime(long elapsedTime) {
 		this.elapsedTime = elapsedTime;
 	}
+	public String getErrorCode() {
+		return errorCode;
+	}
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
+	}
 
 	@Override
 	public String toString() {
-		return "SearchResult [query=" + query + ", postingList=" + postingList + ", elapsedTime=" + elapsedTime + "]";
+		return "SearchResult [query=" + query + ", postingList=" + postingList
+				+ ", elapsedTime=" + elapsedTime + ", errorCode="
+				+ errorCode + "]";
 	}
+	
 }

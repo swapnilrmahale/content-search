@@ -15,16 +15,18 @@ public class SearchService {
 	public SearchResult search(String query, long time) {
 		SearchResult result = null;
 		dictionary = indexerService.getDictionary();
-		
+
 		if (dictionary == null || dictionary.isEmpty()) {
-			System.err.println("No Indexes to search for");
+			System.err.println("Empty Indexes");
+			result = new SearchResult("NULL_INDEXES");
 		} else {
 			System.out.println("Original Query : " + query);
 			query = LinguisticOptimizer.processToken(query);
 			System.out.println("Query after Linguistic Operations : " + query);
-			List<PostingList> postingList = indexerService.getDictionary().get(query);
+			List<PostingList> postingList = indexerService.getDictionary().get(
+					query);
 			time = System.nanoTime() - time;
-			result = new SearchResult(query, postingList, time);
+			result = new SearchResult(query, postingList, time, "NO_ERROR");
 		}
 		return result;
 	}

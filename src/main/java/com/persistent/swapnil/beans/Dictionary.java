@@ -8,7 +8,6 @@ public class Dictionary {
 	private Map<String, List<PostingList>> dictionary;
 	
 	public Dictionary() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Map<String, List<PostingList>> getDictionary() {

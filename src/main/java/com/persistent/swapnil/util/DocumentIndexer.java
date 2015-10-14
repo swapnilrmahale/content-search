@@ -40,7 +40,7 @@ public class DocumentIndexer {
 		} else {
 			System.err.println(document.getAbsolutePath() + " is not present");
 		}
-		System.out.println(dictionary.size() + " terms indexed");
+		System.out.println(dictionary.asMap().size() + " terms indexed");
 		return dictionary;
 	}
 	
